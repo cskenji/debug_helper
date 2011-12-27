@@ -1,4 +1,5 @@
 Debug helper v1.0
+An alternative for print_r and var_dump.
 print_d();
 
 This is simple and easy debug helper for Codeigniter
