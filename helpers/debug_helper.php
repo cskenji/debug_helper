@@ -50,7 +50,13 @@ if ( ! function_exists('debug'))
 		{
 			// if not array/object var_dump is better and is more detailed (for example in when data is boolean !)
 			// or when xdebug installed it can style var_dump in output automatically
+			$html_errors = (int) ini_get('html_errors');
+            if (empty($html_errors))
+            {
+                ini_set('html_errors', 1);
+            }
 			var_dump($data);
+            ini_set('html_errors', $html_errors);
 		}	
 		echo '</pre>';
 		
