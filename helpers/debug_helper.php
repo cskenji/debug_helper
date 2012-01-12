@@ -50,13 +50,8 @@ if ( ! function_exists('debug'))
 		{
 			// if not array/object var_dump is better and is more detailed (for example in when data is boolean !)
 			// or when xdebug installed it can style var_dump in output automatically
-			$html_errors = (int) ini_get('html_errors');
-            if (empty($html_errors))
-            {
-                ini_set('html_errors', 1);
-            }
+			@ini_set('html_errors', 1);
 			var_dump($data);
-            ini_set('html_errors', $html_errors);
 		}	
 		echo '</pre>';
 		
@@ -111,6 +106,42 @@ if ( ! function_exists('print_d'))
 	{
 		debug($data, $benchmark);
 	}
+}
+
+// ------------------------------------------------------------------------
+
+/**
+ * Dump
+ * 
+ * Outputs all variable(s) with formatting and location
+ * 
+ * @param	mixed
+ * @return	string
+ */
+function dump()
+{
+    if (ENVIRONMENT === 'production')
+    {
+        return null;
+    }
+    
+    list($callee) = debug_backtrace();
+    $arguments = func_get_args();
+    $total_arguments = count($arguments);
+    @ini_set('html_errors', 1);
+    
+    echo '<fieldset style="background: #fefefe !important; border:2px red solid; padding:5px">';
+    echo '<legend style="background:lightgrey; padding:5px;">'.$callee['file'].' @ line: '.$callee['line'].'</legend><pre>';
+    $i = 0;
+    foreach ($arguments as $argument)
+    {
+        echo '<br/><strong>Debug #'.(++$i).' of '.$total_arguments.'</strong>: ';
+        var_dump($argument);
+    }
+
+    echo "</pre>";
+    echo "</fieldset>";
+    exit;
 }
 
 // ------------------------------------------------------------------------
